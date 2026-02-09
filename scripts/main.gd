@@ -1,7 +1,7 @@
 extends Node2D
 class_name Main
 
-static var row_size: int = 2
+static var row_size: int = 3
 
 @export var board_node: Control
 var board_array: Array
@@ -92,22 +92,28 @@ func generate_board_pairs():
 		
 	return board
 	
-func generate_board(element):
-	var board: Array[Array]
-	
-	for row in row_size:
-		var new_row: Array = []
-		
-		for col in row_size:
-			new_row.append(element)
-			
-		board.append(new_row)
-		
+func generate_board():
+	var board :Array[Array]= []
+	for i in row_size:
+		var row := []
+		for j in row_size:
+			row.append(generate_empty_grid())
+		board.append(row)
 	return board
 
+	
+func generate_empty_grid():
+	var grid :Array[Array]= []
+	for i in row_size:
+		var row := []
+		for j in row_size:
+			row.append(0)
+		grid.append(row)
+	return grid
+	
 func fill_board():
 	var pairs: Array[Array] = generate_board_pairs()
-	var board: Array[Array] = generate_board(generate_board(0))
+	var board: Array[Array] = generate_board()
 	print(board)
 	while not pairs.is_empty():
 		var pair: Array = pairs.pick_random()
