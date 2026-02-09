@@ -1,7 +1,7 @@
 extends Node2D
 class_name Main
 
-static var row_size: int = 2
+static var row_size: int = 3
 
 @export var board_node: Control
 var board_array: Array
@@ -68,18 +68,6 @@ static func createGrid(array :Array, target_class: Resource):
 		
 	return rows
 
-#static func is_valid_sequence(arr: Array):
-	#return (arr.filter(func(element): return count(arr,element)>1).size()==0)
-
-static func count(arr: Array, element: int):
-	var count: int = 0
-	
-	for i in arr:
-		if i == element:
-			count+=1
-			
-	return count
-
 func generate_board_pairs():
 	var board: Array[Array]
 	
@@ -118,75 +106,72 @@ func fill_board():
 	print(board)
 	return board
 
-func try_seed(pairs: Array, board:Array):
-	if not has_zero(board):
+func try_seed(pairs: Array, board: Array) -> bool:
+	if pairs.is_empty():
 		return true
-	var used_pairs: Array[Array] = []
-	for pair in pairs:
-		for value in get_valid_numbers(board, pair):
-				
-			board[pair[0]/row_size as int][pair[1]/row_size as int][pair[0]%row_size as int][pair[1]%row_size as int] = value
-			
-			var result = try_seed(pairs.filter(func(el): return el != pair),board)
-			if result:
-				return true
-					
-			board[pair[0]/row_size as int][pair[1]/row_size as int][pair[0]%row_size as int][pair[1]%row_size as int] = 0
-			used_pairs.append(pair)
+
+	var best_pair = null
+	var best_options := []
+
+	for p in pairs:
+		var options :Array = get_valid_numbers(board, p)
+		if options.is_empty():
+			return false
+		if best_pair == null or options.size() < best_options.size():
+			best_pair = p
+			best_options = options
+		if best_options.size() == 1:
+			break
+
+	var bx: int= best_pair[0] / row_size
+	var by: int = best_pair[1] / row_size
+	var cx: int = best_pair[0] % row_size
+	var cy: int = best_pair[1] % row_size
+
+	for value in best_options:
+		board[bx][by][cx][cy] = value
+
+		var next_pairs := pairs.duplicate()
+		next_pairs.erase(best_pair)
+
+		if try_seed(next_pairs, board):
+			return true
+
+		board[bx][by][cx][cy] = 0
 
 	return false
 
-func test(pairs: Array, board:Array):
-	var used_pairs: Array[Array] = []
-	
-	var exit: int = 0
-	while not pairs.is_empty() and exit<500:
-		var pair: Array = pairs.pick_random()
-		var valid_numbers = get_valid_numbers(board, pair)
-		exit+=1
-		if valid_numbers.is_empty():
-			#if used_pairs.is_empty():
-				print("fail")
-				return null
-			#var last_used_pair: Array = used_pairs[-1]
-			#print(used_pairs[-1])
-			#used_pairs.erase(last_used_pair)
-			#board[last_used_pair[0]/row_size as int][last_used_pair[1]/row_size as int][last_used_pair[0]%row_size as int][last_used_pair[1]%row_size as int] = 0
-			#pairs.append(last_used_pair)
-		else:
-			board[pair[0]/row_size as int][pair[1]/row_size as int][pair[0]%row_size as int][pair[1]%row_size as int] = valid_numbers.pick_random()
-		
-			pairs.erase(pair)
-			used_pairs.append(pair)
-	return board
-
-func get_valid_numbers(board: Array[Array], pair: Array):
+func get_valid_numbers(board: Array, pair: Array) -> Array:
 	var valid_numbers: Array = []
-	var check_vert: Array = []
-	var check_horiz: Array = []
-	var check_grid: Array = []
-	
-	for i in row_size*row_size:
-		check_vert.append(board[pair[0]/row_size][i/row_size][pair[0]%row_size][i%row_size])
-		check_horiz.append(board[i/row_size][pair[1]/row_size][i%row_size][pair[1]%row_size])
-	
-	for i in row_size:
-		for j in row_size:
-			check_grid.append(board[pair[0]/row_size][pair[1]/row_size][i][j])
-			
-	for number in allowed_numbers:
-		if check_number_in_sequence(check_vert,number) and check_number_in_sequence(check_horiz, number) and check_number_in_sequence(check_grid, number):
-			valid_numbers.append(number)
-	return valid_numbers
-	
-func check_number_in_sequence(arr: Array, number: int):
-	return arr.filter(func(i): return i==number).size() == 0
 
-func has_zero(array) -> bool:
-	for i in array:
-		for j in i:
-			for k in j:
-				for l in k:
-					if l == 0:
-						return true
-	return false
+	var bx :int = pair[0] / row_size
+	var by :int = pair[1] / row_size
+	var cx :int = pair[0] % row_size
+	var cy :int = pair[1] % row_size
+
+	for number in allowed_numbers:
+		var is_ok := true
+
+		for i in row_size * row_size:
+			if board[bx][i / row_size][cx][i % row_size] == number:
+				is_ok = false
+				break
+			if board[i / row_size][by][i % row_size][cy] == number:
+				is_ok = false
+				break
+
+		if not is_ok:
+			continue
+
+		for i in row_size:
+			for j in row_size:
+				if board[bx][by][i][j] == number:
+					is_ok = false
+					break
+			if not is_ok:
+				break
+
+		if is_ok:
+			valid_numbers.append(number)
+
+	return valid_numbers
