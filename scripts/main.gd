@@ -1,7 +1,7 @@
 extends Node2D
 class_name Main
 
-static var row_size: int = 3
+static var row_size: int = 2
 
 @export var board_node: Control
 var board_array: Array
@@ -47,11 +47,8 @@ var allowed_numbers: Array
 func _ready() -> void:
 	init_allowed_numbers()
 	board_array = fill_board()
+	print(board_array)
 	board_node.setup(board_array)
-	var pair: Array[int] = [7,7]
-	print(7/3)
-	var i = 8
-	print([pair[0]/row_size,i/row_size],[pair[0]%row_size,i%row_size])
 	
 func init_allowed_numbers():
 	for i in row_size*row_size:
@@ -112,17 +109,57 @@ func generate_empty_grid():
 	return grid
 	
 func fill_board():
-	var pairs: Array[Array] = generate_board_pairs()
-	var board: Array[Array] = generate_board()
+	var pairs: Array = generate_board_pairs()
+	var board: Array = generate_board()
+	
+	pairs.shuffle()
+	board = try_seed(pairs, board)
 	print(board)
-	while not pairs.is_empty():
+	return board
+
+func try_seed(pairs: Array, board:Array):
+	if not has_zero(board):
+		return board
+	var result : Array = []
+	var used_pairs: Array[Array] = []
+	for pair in pairs:
+		if result.is_empty():
+			for value in get_valid_numbers(board, pair):
+					
+				board[pair[0]/row_size as int][pair[1]/row_size as int][pair[0]%row_size as int][pair[1]%row_size as int] = value
+			
+				result = try_seed(pairs.filter(func(el): return el != pair),board)
+				if not result.is_empty():
+					return board
+					
+				board[pair[0]/row_size as int][pair[1]/row_size as int][pair[0]%row_size as int][pair[1]%row_size as int] = 0
+				used_pairs.append(pair)
+		else:
+			return result
+	return []
+
+func test(pairs: Array, board:Array):
+	var used_pairs: Array[Array] = []
+	
+	var exit: int = 0
+	while not pairs.is_empty() and exit<500:
 		var pair: Array = pairs.pick_random()
 		var valid_numbers = get_valid_numbers(board, pair)
+		exit+=1
 		if valid_numbers.is_empty():
-			print("fail")
-			return board
-		board[pair[0]/row_size][pair[1]/row_size][pair[0]%row_size][pair[1]%row_size] = valid_numbers.pick_random()
-		pairs.erase(pair)
+			#if used_pairs.is_empty():
+				print("fail")
+				return null
+			#var last_used_pair: Array = used_pairs[-1]
+			#print(used_pairs[-1])
+			#used_pairs.erase(last_used_pair)
+			#board[last_used_pair[0]/row_size as int][last_used_pair[1]/row_size as int][last_used_pair[0]%row_size as int][last_used_pair[1]%row_size as int] = 0
+			#pairs.append(last_used_pair)
+		else:
+			board[pair[0]/row_size as int][pair[1]/row_size as int][pair[0]%row_size as int][pair[1]%row_size as int] = valid_numbers.pick_random()
+		
+			pairs.erase(pair)
+			used_pairs.append(pair)
 	return board
 
 func get_valid_numbers(board: Array[Array], pair: Array):
@@ -146,3 +183,12 @@ func get_valid_numbers(board: Array[Array], pair: Array):
 	
 func check_number_in_sequence(arr: Array, number: int):
 	return arr.filter(func(i): return i==number).size() == 0
+
+func has_zero(array) -> bool:
+	for i in array:
+		for j in i:
+			for k in j:
+				for l in k:
+					if l == 0:
+						return true
+	return false
