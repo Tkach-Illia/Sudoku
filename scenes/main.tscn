@@ -6,9 +6,8 @@
 [node name="Node2D" type="Node2D" unique_id=1934224561]
 script = ExtResource("1_0wfyh")
 
-[node name="Container" type="Container" parent="." unique_id=424779875]
-
-[node name="Board" parent="Container" unique_id=1810149725 instance=ExtResource("1_o5qli")]
-layout_mode = 2
+[node name="Board" parent="." unique_id=1810149725 instance=ExtResource("1_o5qli")]
+offset_right = 0.0
+offset_bottom = 0.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
