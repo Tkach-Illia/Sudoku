@@ -1,9 +1,9 @@
-extends GridContainer
+extends Control
 class_name SingleGrid
 
-var grid: Array = [[0,0,0], [0,0,0], [0,0,0]]
+var grid: MyGrid
 
-func setup(_grid: Array):
+func setup(_grid: MyGrid):
 	grid = _grid
-	add_child(Main.createGrid(grid, preload("res://scenes/single_number.tscn")))
+	add_child(Main.createGrid(grid.get_stucked_array(), preload("res://scenes/single_number.tscn")))
 	return self

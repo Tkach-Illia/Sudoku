@@ -3,8 +3,9 @@ class_name Main
 
 static var max_number: int = 9
 static var min_number: int = 1
+static var row_size: int = 3
 
-@export var board_size: Array[int] = [2,3]
+@export var board: Control
 var board_array: Array
 var callback_array: Array
 
@@ -46,18 +47,22 @@ var callback_array: Array
 ]
 
 func _ready() -> void:
-	print(numbers[0][0])
-	var grid = Grid3х3.new(numbers[0][0])
-	print(Main.is_valid(grid.get_array()))
+	board_array = generate_board()
+	print(board_array)
+	board.setup(board_array)
 
 static func createGrid(array :Array, target_class: Resource):
 	var rows = VBoxContainer.new()
+	
 	for row in array:
 		var single_row = HBoxContainer.new()
+		
 		for element in row:
-			var single_grid = target_class.instantiate()
-			single_row.add_child(single_grid.setup(element))
+			var single_el = target_class.instantiate()
+			single_row.add_child(single_el.setup(element))
+			
 		rows.add_child(single_row)
+		
 	return rows
 
 static func is_valid(arr: Array):
@@ -65,7 +70,26 @@ static func is_valid(arr: Array):
 
 static func count(arr: Array, element: int):
 	var count: int = 0
+	
 	for i in arr:
 		if i == element:
 			count+=1
+			
 	return count
+	
+func is_valid_number(arr: Array, number: int):
+	return count(arr, number)>1
+
+func generate_board():
+	var board: Array[Array]
+	
+	for row in row_size:
+		var new_row: Array = []
+		
+		for col in row_size:
+			new_row.append(MyGrid.new())
+			print(row*col)
+			
+		board.append(new_row)
+		
+	return board

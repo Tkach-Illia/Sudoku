@@ -2,8 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cht66ih14mhcc" path="res://scripts/singe_grid.gd" id="1_3wesf"]
 
-[node name="SingeGrid" type="GridContainer" unique_id=1740083262]
+[node name="GridContainer" type="GridContainer" unique_id=1031266086]
 offset_right = 40.0
 offset_bottom = 40.0
-columns = 3
 script = ExtResource("1_3wesf")
