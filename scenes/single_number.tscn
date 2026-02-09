@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://ecfoxticna1t"]
+
+[ext_resource type="Script" uid="uid://bmuk3k2dqovh2" path="res://scripts/single_number.gd" id="1_k5p38"]
+
+[node name="SingleNumber" type="PanelContainer" unique_id=1658542777]
+custom_minimum_size = Vector2(40, 40)
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_k5p38")
+
+[node name="Label" type="Label" parent="." unique_id=816819613]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "1"

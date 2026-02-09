@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://rbwjbful7t5m"]
+
+[ext_resource type="Script" uid="uid://c41lfkafsn6gt" path="res://scripts/board.gd" id="1_bw3vb"]
+
+[node name="Board" type="Control" unique_id=1810149725]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_bw3vb")
