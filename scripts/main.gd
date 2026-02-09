@@ -113,30 +113,28 @@ func fill_board():
 	var board: Array = generate_board()
 	
 	pairs.shuffle()
-	board = try_seed(pairs, board)
+	var i = 0
+	try_seed(pairs, board)
 	print(board)
 	return board
 
 func try_seed(pairs: Array, board:Array):
 	if not has_zero(board):
-		return board
-	var result : Array = []
+		return true
 	var used_pairs: Array[Array] = []
 	for pair in pairs:
-		if result.is_empty():
-			for value in get_valid_numbers(board, pair):
-					
-				board[pair[0]/row_size as int][pair[1]/row_size as int][pair[0]%row_size as int][pair[1]%row_size as int] = value
+		for value in get_valid_numbers(board, pair):
+				
+			board[pair[0]/row_size as int][pair[1]/row_size as int][pair[0]%row_size as int][pair[1]%row_size as int] = value
 			
-				result = try_seed(pairs.filter(func(el): return el != pair),board)
-				if not result.is_empty():
-					return board
+			var result = try_seed(pairs.filter(func(el): return el != pair),board)
+			if result:
+				return true
 					
-				board[pair[0]/row_size as int][pair[1]/row_size as int][pair[0]%row_size as int][pair[1]%row_size as int] = 0
-				used_pairs.append(pair)
-		else:
-			return result
-	return []
+			board[pair[0]/row_size as int][pair[1]/row_size as int][pair[0]%row_size as int][pair[1]%row_size as int] = 0
+			used_pairs.append(pair)
+
+	return false
 
 func test(pairs: Array, board:Array):
 	var used_pairs: Array[Array] = []
