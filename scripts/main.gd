@@ -1,13 +1,17 @@
 extends Node2D
 class_name Main
 
+static var max_number: int = 9
+static var min_number: int = 1
+
 @export var board_size: Array[int] = [2,3]
 var board_array: Array
 var callback_array: Array
+
 @export var numbers: Array = [
   [
 	[
-	  [3, 7, 2],
+	  [3, 7, 1],
 	  [9, 4, 6],
 	  [2, 8, 5]
 	],
@@ -44,7 +48,7 @@ var callback_array: Array
 func _ready() -> void:
 	print(numbers[0][0])
 	var grid = Grid3х3.new(numbers[0][0])
-	print(grid.is_valid())
+	print(Main.is_valid(grid.get_array()))
 
 static func createGrid(array :Array, target_class: Resource):
 	var rows = VBoxContainer.new()
@@ -55,3 +59,13 @@ static func createGrid(array :Array, target_class: Resource):
 			single_row.add_child(single_grid.setup(element))
 		rows.add_child(single_row)
 	return rows
+
+static func is_valid(arr: Array):
+	return (arr.filter(func(element): return count(arr,element)>1).size()==0)
+
+static func count(arr: Array, element: int):
+	var count: int = 0
+	for i in arr:
+		if i == element:
+			count+=1
+	return count
