@@ -4,9 +4,7 @@ var row_size: int
 var grid: Array = []
 
 func _init(_array: Array = get_blank()):
-	row_size = Main.row_size
-	for row in _array:
-		grid.append(row)
+	grid = set_grid_from_array2(_array)
 
 func get_cell(x: int,y: int):
 	return grid[y * row_size + x]
@@ -28,3 +26,10 @@ func get_blank():
 	for el in Main.row_size*Main.row_size:
 		array.append(1)
 	return array
+
+func set_grid_from_array2(arr: Array):
+	var new_grid: Array = []
+	for i in arr:
+		for j in i:
+			new_grid.append(j)
+	return new_grid

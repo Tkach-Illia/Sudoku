@@ -3,12 +3,10 @@
 [ext_resource type="Script" uid="uid://dre2kc1qaouit" path="res://scripts/main.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://rbwjbful7t5m" path="res://scenes/board.tscn" id="1_o5qli"]
 
-[node name="Node2D" type="Node2D" unique_id=1934224561 node_paths=PackedStringArray("board")]
+[node name="Node2D" type="Node2D" unique_id=1934224561 node_paths=PackedStringArray("board_node")]
 script = ExtResource("1_0wfyh")
-board = NodePath("Board")
+board_node = NodePath("Board")
 
 [node name="Board" parent="." unique_id=1810149725 instance=ExtResource("1_o5qli")]
-offset_right = 0.0
-offset_bottom = 0.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
