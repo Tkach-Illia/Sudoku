@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://6njvpx7u867n"]
+
+[ext_resource type="Script" uid="uid://db43e4782jf8" path="res://scripts/keyboard.gd" id="1_attx4"]
+
+[node name="Keyboard" type="GridContainer" unique_id=1720932743]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_attx4")

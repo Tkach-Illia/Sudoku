@@ -13,9 +13,6 @@ func setup(data: MyData):
 	$Label.set_text(str(number_value))
 	return self
 
-func changeNumber(new_number):
-	pass
-
 func _on_mouse_entered() -> void:
 	if is_changable:
 		is_hover = true
@@ -27,4 +24,5 @@ func _on_mouse_exited() -> void:
 func _on_gui_input(event: InputEvent) -> void:
 	if is_hover and event is InputEventMouseButton:
 		if event.button_index == 1 and event.is_pressed():
-			print(number_value)
+			print(number_value, coords)
+			EventBus.showKeyboard.emit(number_value, coords)
