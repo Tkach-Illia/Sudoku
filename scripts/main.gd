@@ -12,6 +12,7 @@ var allowed_numbers: Array
 func _ready() -> void:
 	allowed_numbers = sudoku_gen.getAllowedNumbers()
 	board_numbers = sudoku_gen.fill_board()
+	board_numbers = sudoku_gen.init_board_for_game(board_numbers, 0.2)
 	var board_array = generate_board_array(board_numbers)
 	board_node.setup(board_array)
 	EventBus.initCalcValidNumbers.connect(_getValidNumbers)
@@ -27,7 +28,7 @@ func generate_board_array(board_numbers: Array):
 			for k in board_numbers[i][j].size():
 				var xc: Array = []
 				for l in board_numbers[i][j][k].size():
-					xc.append(MyData.new(board_numbers[i][j][k][l],[i,j,k,l], true))
+					xc.append(MyData.new(board_numbers[i][j][k][l],[i,j,k,l], false if board_numbers[i][j][k][l] !=0 else true))
 				by.append(xc)
 			bx.append(by)
 		board.append(bx)

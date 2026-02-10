@@ -124,3 +124,13 @@ func getBoard():
 	
 func getAllowedNumbers():
 	return allowed_numbers
+
+func init_board_for_game(board: Array, difficulty: float = .3):
+	var new_board = board
+	for i in new_board.size():
+		for j in new_board[0].size():
+			for k in new_board[0][0].size():
+				for l in new_board[0][0][0].size():	
+					if randf() <= difficulty:
+						new_board[i][j][k][l] = 0
+	return new_board

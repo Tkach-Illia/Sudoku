@@ -2,7 +2,18 @@
 
 [ext_resource type="Script" uid="uid://db43e4782jf8" path="res://scripts/keyboard.gd" id="1_attx4"]
 
-[node name="Keyboard" type="GridContainer" unique_id=1720932743]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="Keyboard" type="VBoxContainer" unique_id=33074322 node_paths=PackedStringArray("but_container")]
+offset_right = 49.0
+offset_bottom = 35.0
 script = ExtResource("1_attx4")
+but_container = NodePath("Buttons")
+
+[node name="Buttons" type="GridContainer" parent="." unique_id=134459360]
+layout_mode = 2
+columns = 3
+
+[node name="Clear" type="Button" parent="." unique_id=459326681]
+layout_mode = 2
+text = "Clear"
+
+[connection signal="pressed" from="Clear" to="." method="_on_clear_pressed"]
