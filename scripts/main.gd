@@ -4,52 +4,33 @@ class_name Main
 static var row_size: int = 3
 
 @export var board_node: Control
-var board_array: Array
+var board_numbers: Array
 var callback_array: Array
 var allowed_numbers: Array
-@export var numbers: Array = [
-  [
-	[
-	  [3, 7, 1],
-	  [9, 4, 6],
-	  [2, 8, 5]
-	],
-	[
-	  [6, 2, 8],
-	  [1, 5, 9],
-	  [7, 3, 4]
-	],
-	[
-	  [4, 9, 5],
-	  [8, 3, 2],
-	  [6, 1, 7]
-	]
-  ],
-  [
-	[
-	  [8, 1, 4],
-	  [3, 6, 7],
-	  [9, 5, 2]
-	],
-	[
-	  [5, 6, 3],
-	  [2, 8, 1],
-	  [4, 7, 9]
-	],
-	[
-	  [7, 2, 9],
-	  [4, 1, 5],
-	  [8, 6, 3]
-	]
-  ]
-]
 
 func _ready() -> void:
 	init_allowed_numbers()
-	board_array = fill_board()
-	print(board_array)
+	board_numbers = fill_board()
+	var board_array = generate_board_array(board_numbers)
 	board_node.setup(board_array)
+
+func generate_board_array(board_numbers: Array):
+	var board: Array[Array]
 	
+	for i in board_numbers.size():
+		var bx : Array = []
+		for j in board_numbers[i].size():
+			var by: Array = []
+			for k in board_numbers[i][j].size():
+				var xc: Array = []
+				for l in board_numbers[i][j][k].size():
+					xc.append(MyData.new(l,[i,j,k,l], true))
+				by.append(xc)
+			bx.append(by)
+		board.append(bx)
+		
+	return board
+
 func init_allowed_numbers():
 	for i in row_size*row_size:
 		allowed_numbers.append(i+1)
@@ -80,7 +61,7 @@ func generate_board_pairs():
 func generate_board():
 	var board :Array[Array]= []
 	for i in row_size:
-		var row := []
+		var row : Array = []
 		for j in row_size:
 			row.append(generate_empty_grid())
 		board.append(row)
@@ -90,7 +71,7 @@ func generate_board():
 func generate_empty_grid():
 	var grid :Array[Array]= []
 	for i in row_size:
-		var row := []
+		var row :Array = []
 		for j in row_size:
 			row.append(0)
 		grid.append(row)
