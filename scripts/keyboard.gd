@@ -9,6 +9,7 @@ func _ready() -> void:
 	EventBus.returnValidNumbers.connect(_fill_keyboard)
 
 func _show_self(_number: int, _coords:Array):
+	visible = true
 	for child in but_container.get_children():
 		but_container.remove_child(child)
 		child.queue_free()
@@ -27,7 +28,9 @@ func _fill_keyboard(numbers: Array):
 
 func button_pressed(_number: int):
 	EventBus.changeNumber.emit(_number, coords)
+	visible = false
 
 
 func _on_clear_pressed() -> void:
 	EventBus.changeNumber.emit(0, coords)
+	visible = false

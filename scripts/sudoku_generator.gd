@@ -134,3 +134,13 @@ func init_board_for_game(board: Array, difficulty: float = .3):
 					if randf() <= difficulty:
 						new_board[i][j][k][l] = 0
 	return new_board
+
+
+func check_for_win(board: Array):
+	for i in board:
+		for j in i:
+			for k in j:
+				for l in k:	
+					if l == 0:
+						return false
+	return true

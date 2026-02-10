@@ -7,3 +7,6 @@ signal changeNumber(new_number: int, coords: Array)
 #Main - Kayboard communacation
 signal initCalcValidNumbers(pair: Array)
 signal returnValidNumbers(valid_numbers: Array)
+
+#Finisher
+signal gameEnded()

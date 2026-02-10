@@ -10,13 +10,17 @@ var callback_array: Array
 var allowed_numbers: Array
 
 func _ready() -> void:
-	allowed_numbers = sudoku_gen.getAllowedNumbers()
-	board_numbers = sudoku_gen.fill_board()
-	board_numbers = sudoku_gen.init_board_for_game(board_numbers, 0.2)
-	var board_array = generate_board_array(board_numbers)
-	board_node.setup(board_array)
+	start_game(0.2)
 	EventBus.initCalcValidNumbers.connect(_getValidNumbers)
 	EventBus.changeNumber.connect(_changeNumber)
+	EventBus.gameEnded.connect(_gameEnded)
+
+func start_game(difficulty: float):
+	allowed_numbers = sudoku_gen.getAllowedNumbers()
+	board_numbers = sudoku_gen.fill_board()
+	board_numbers = sudoku_gen.init_board_for_game(board_numbers, difficulty)
+	var board_array = generate_board_array(board_numbers)
+	board_node.setup(board_array)
 
 func generate_board_array(board_numbers: Array):
 	var board: Array[Array]
@@ -56,3 +60,8 @@ func _getValidNumbers(coods):
 	
 func _changeNumber(new_number, coords):
 	board_numbers[coords[0]][coords[1]][coords[2]][coords[3]] = new_number
+	if sudoku_gen.check_for_win(board_numbers):
+		EventBus.gameEnded.emit()
+
+func _gameEnded():
+	print("YAY")
